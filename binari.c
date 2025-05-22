@@ -148,7 +148,7 @@ BTNode *btnode_search(const char *url)
     strcpy(url_buffer, url);
 
     BTNode *parent = &btroot;
-    for (char *tag = strtok_r(url_buffer, "/", &inner_safe_ptr), *leftovers = __strtok_r(NULL, "", &inner_safe_ptr);
+    for (char *tag = strtok_r(url_buffer, "/", &inner_safe_ptr), *leftovers = strtok_r(NULL, "", &inner_safe_ptr);
          tag != NULL;
          tag = strtok_r(leftovers, "/", &inner_safe_ptr), leftovers = strtok_r(NULL, "", &inner_safe_ptr))
     {
