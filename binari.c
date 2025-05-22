@@ -107,13 +107,14 @@ BTNode *btnode_create(const char *url, HandleFunctionType handle)
 
     // Copy URL in destructive buffer
     char url_buffer[URL_BUFFER_SIZE] = {0};
+    char *inner_safe_ptr = url_buffer;
     strcpy(url_buffer, url);
 
     //  Allocation
     BTNode *parent = &btroot;
-    for (char *tag = strtok(url_buffer, "/"), *leftovers = strtok(NULL, "");
+    for (char *tag = strtok_r(url_buffer, "/", &inner_safe_ptr), *leftovers = strtok_r(NULL, "", &inner_safe_ptr);
          tag != NULL;
-         tag = strtok(leftovers, "/"), leftovers = strtok(NULL, ""))
+         tag = strtok_r(leftovers, "/", &inner_safe_ptr), leftovers = strtok_r(NULL, "", &inner_safe_ptr))
     {
         // Search if exists
         BTNode *node = btnode_right_search(parent->left, tag);
@@ -139,19 +140,17 @@ BTNode *btnode_create(const char *url, HandleFunctionType handle)
     return parent;
 }
 
-BTNode *btnode_search(BTNode *root, char *url)
+BTNode *btnode_search(const char *url)
 {
-    if (root == NULL)
-        return NULL;
-
     // Copy URL in destructive buffer
     char url_buffer[URL_BUFFER_SIZE];
+    char *inner_safe_ptr = url_buffer;
     strcpy(url_buffer, url);
 
-    BTNode *parent = root;
-    for (char *tag = strtok(url_buffer, "/"), *leftovers = strtok(NULL, "");
+    BTNode *parent = &btroot;
+    for (char *tag = strtok_r(url_buffer, "/", &inner_safe_ptr), *leftovers = __strtok_r(NULL, "", &inner_safe_ptr);
          tag != NULL;
-         tag = strtok(leftovers, "/"), leftovers = strtok(NULL, ""))
+         tag = strtok_r(leftovers, "/", &inner_safe_ptr), leftovers = strtok_r(NULL, "", &inner_safe_ptr))
     {
         BTNode *node = btnode_right_search(parent->left, tag);
         if (node == NULL)

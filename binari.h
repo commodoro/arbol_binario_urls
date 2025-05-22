@@ -21,6 +21,6 @@ struct BTNodeStr
 extern BTNode btroot;
 
 BTNode *btnode_create(const char *url, HandleFunctionType handle);
-BTNode *btnode_search(BTNode *root, char *url);
+BTNode *btnode_search(const char *url);
 
 #endif
